@@ -32,6 +32,7 @@ func main() {
 	docs.SwaggerInfo.Host = os.Getenv("CONTAINER_APP_HOSTNAME")
 	router := gin.New()
 	router.GET("/hello", api.GetHello)
+	router.GET("/bye", api.GetBye)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	srv := &http.Server{
