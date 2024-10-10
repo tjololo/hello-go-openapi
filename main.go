@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"github.com/tjololo/hello-go-openapi/api"
-	_ "github.com/tjololo/hello-go-openapi/docs"
+	"github.com/tjololo/hello-go-openapi/docs"
 	"log"
 	"net/http"
+	"os"
 	"os/signal"
 	"syscall"
 	"time"
@@ -28,7 +29,7 @@ func main() {
 	// Create context that listens for the interrupt signal from the OS.
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
-
+	docs.SwaggerInfo.Host = os.Getenv("CONTAINER_APP_HOSTNAME")
 	router := gin.New()
 	router.GET("/hello", api.GetHello)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
