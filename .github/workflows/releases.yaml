@@ -1,9 +1,9 @@
-name: Bazel push
+name: release
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   test-build:
@@ -12,6 +12,9 @@ jobs:
     permissions:
       packages: write
     steps:
+      - name: Get version from tags
+        id: version
+        run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
       - uses: bazel-contrib/setup-bazel@0.9.0
         with:
           bazelisk-cache: true
@@ -38,4 +41,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Push to ghcr.io
         run: |
-          bazel run //:push --stamp --embed_label=main
+          bazel run //:push --stamp --embed_label=${{ steps.version.outputs.tag }}
