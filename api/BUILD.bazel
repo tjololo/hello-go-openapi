@@ -2,10 +2,7 @@ load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "api",
-    srcs = [
-        "bye.go",
-        "hello.go",
-    ],
+    srcs = ["hello.go"],
     importpath = "github.com/tjololo/hello-go-openapi/api",
     visibility = ["//visibility:public"],
     deps = ["@com_github_gin_gonic_gin//:gin"],

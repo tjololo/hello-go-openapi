@@ -9,36 +9,18 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
-  /bye:
-    get:
-      consumes:
-      - plain/txt
-      description: get a bye message
-      parameters:
-      - description: Some Name
-        in: query
-        name: name
-        type: string
-      produces:
-      - plain/txt
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: Get Bye
   /hello:
     get:
       consumes:
-      - plain/txt
+      - text/plain
       description: get a hello message
       parameters:
       - description: Some Name
         in: query
-        name: name
+        name: myname
         type: string
       produces:
-      - plain/txt
+      - text/plain
       responses:
         "200":
           description: ok
