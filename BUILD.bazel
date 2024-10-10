@@ -65,6 +65,9 @@ oci_image(
     name = "image_amd64",
     base = "@distroless_base_amd64",
     entrypoint = ["/app-amd64"],
+    env = {
+        "GIN_MODE": "release",
+    },
     tars = [":tar-amd64"],
 )
 
@@ -72,6 +75,9 @@ oci_image(
     name = "image_arm64",
     base = "@distroless_base_arm64",
     entrypoint = ["/app-arm64"],
+    env = {
+        "GIN_MODE": "release",
+    },
     tars = [":tar-arm64"],
 )
 
