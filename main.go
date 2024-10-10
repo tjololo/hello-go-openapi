@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/tjololo/hello-go-openapi/api"
 	"log"
 	"net/http"
 	"os/signal"
@@ -17,10 +18,7 @@ func main() {
 	defer stop()
 
 	router := gin.Default()
-	router.GET("/", func(c *gin.Context) {
-		time.Sleep(10 * time.Second)
-		c.String(http.StatusOK, "Welcome Gin Server")
-	})
+	router.GET("/", api.GetHello)
 
 	srv := &http.Server{
 		Addr:    ":8080",
@@ -30,6 +28,7 @@ func main() {
 	// Initializing the server in a goroutine so that
 	// it won't block the graceful shutdown handling below
 	go func() {
+		log.Printf("Starting server on %s", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen: %s\n", err)
 		}

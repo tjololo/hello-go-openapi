@@ -30,7 +30,10 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/tjololo/hello-go-openapi",
     visibility = ["//visibility:private"],
-    deps = ["@com_github_gin_gonic_gin//:gin"],
+    deps = [
+        "//api",
+        "@com_github_gin_gonic_gin//:gin",
+    ],
 )
 
 go_binary(
