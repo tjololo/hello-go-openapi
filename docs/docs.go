@@ -20,6 +20,34 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/bye": {
+            "get": {
+                "description": "get a bye message",
+                "consumes": [
+                    "plain/txt"
+                ],
+                "produces": [
+                    "plain/txt"
+                ],
+                "summary": "Get Bye",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Some Name",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/hello": {
             "get": {
                 "description": "get a hello message",
