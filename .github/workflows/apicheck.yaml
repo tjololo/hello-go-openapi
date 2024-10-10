@@ -1,0 +1,23 @@
+name: Check for breaking changes in API
+
+on:
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure spec is up-to-date
+        run: |
+          make gen-swagger
+      - name: Check for breaking changes in API
+        id: breaking_changes
+        uses: oasdiff/oasdiff-action/breaking@v0.0.19
+        with:
+          base: https://raw.githubusercontent.com/tjololo/hello-go-openapi/refs/heads/main/docs/swagger.yaml
+          revision: docs/swagger.yaml
+          fail-on: true

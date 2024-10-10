@@ -31,6 +31,7 @@ func main() {
 
 	router := gin.New()
 	router.GET("/hello", api.GetHello)
+	router.GET("/bye", api.GetBye)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	srv := &http.Server{
