@@ -34,7 +34,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Some Name",
-                        "name": "myname",
+                        "name": "name",
                         "in": "query"
                     }
                 ],

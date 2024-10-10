@@ -17,7 +17,7 @@ paths:
       parameters:
       - description: Some Name
         in: query
-        name: myname
+        name: name
         type: string
       produces:
       - text/plain
