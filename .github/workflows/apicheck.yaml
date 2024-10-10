@@ -30,6 +30,7 @@ jobs:
         with:
           script: |
             // 1. Prep the output
+            const output = `# Breaking API Changes Summary
             #### Check for breaking API changes: 🤖\`${{ steps.breaking_changes.outcome }}\`
             <details><summary>Breaking Changes Output</summary>
             
@@ -37,7 +38,7 @@ jobs:
             ${process.env.BREAKING_OUTPUT}
             \`\`\`
             
-            </details>
+            </details>`;
             
             // 2. Set the output variable
             const fs = require('fs');
