@@ -767,7 +767,7 @@
     "@@rules_oci~//oci:extensions.bzl%oci": {
       "general": {
         "bzlTransitiveDigest": "CXFLt/nBWxjkJys1nCGLwA1kZakP/vznMoIJgOVF2Gw=",
-        "usagesDigest": "wDHqz9WvQDwYAcsrUNa7Wc9e+oL/kZmpCgv8k7jB58s=",
+        "usagesDigest": "qEqsvZqJRvpSVBKISLgSAFLxFbLsLlBaWrNwkPeBizQ=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -891,19 +891,6 @@
               "crane_version": "v0.18.0"
             }
           },
-          "distroless_base_linux_amd64": {
-            "bzlFile": "@@rules_oci~//oci/private:pull.bzl",
-            "ruleClassName": "oci_pull",
-            "attributes": {
-              "scheme": "https",
-              "registry": "gcr.io",
-              "repository": "distroless/base",
-              "identifier": "sha256:e22199b06d14c3dc1f1a62f8600a71b53901db7b6e34f23b01426352e538bd51",
-              "platform": "linux/amd64",
-              "target_name": "distroless_base_linux_amd64",
-              "bazel_tags": []
-            }
-          },
           "jq_darwin_arm64": {
             "bzlFile": "@@aspect_bazel_lib~//lib/private:jq_toolchain.bzl",
             "ruleClassName": "jq_platform_repo",
@@ -939,6 +926,18 @@
             "ruleClassName": "regctl_repositories",
             "attributes": {
               "platform": "windows_amd64"
+            }
+          },
+          "distroless_base_amd64_single": {
+            "bzlFile": "@@rules_oci~//oci/private:pull.bzl",
+            "ruleClassName": "oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base",
+              "identifier": "sha256:77830878d4995f05fdcdb8ef5a78021d35d90d173e50d6a607f2751cb902781d",
+              "target_name": "distroless_base_amd64_single",
+              "bazel_tags": []
             }
           },
           "oci_crane_windows_armv6": {
@@ -1008,6 +1007,21 @@
               "platform": "linux_amd64"
             }
           },
+          "distroless_base_arm64": {
+            "bzlFile": "@@rules_oci~//oci/private:pull.bzl",
+            "ruleClassName": "oci_alias",
+            "attributes": {
+              "target_name": "distroless_base_arm64",
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base",
+              "identifier": "sha256:935cc5f6c62e1d175a38a72a1e622b4f03f2aadb22a7f14caa83c90f94433fe9",
+              "platforms": {},
+              "platform": "@@rules_oci~//oci:distroless_base_arm64_single",
+              "bzlmod_repository": "distroless_base_arm64",
+              "reproducible": true
+            }
+          },
           "oci_regctl_darwin_arm64": {
             "bzlFile": "@@rules_oci~//oci:repositories.bzl",
             "ruleClassName": "regctl_repositories",
@@ -1022,6 +1036,18 @@
               "platform": "windows_amd64"
             }
           },
+          "distroless_base_arm64_single": {
+            "bzlFile": "@@rules_oci~//oci/private:pull.bzl",
+            "ruleClassName": "oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base",
+              "identifier": "sha256:935cc5f6c62e1d175a38a72a1e622b4f03f2aadb22a7f14caa83c90f94433fe9",
+              "target_name": "distroless_base_arm64_single",
+              "bazel_tags": []
+            }
+          },
           "jq": {
             "bzlFile": "@@aspect_bazel_lib~//lib/private:jq_toolchain.bzl",
             "ruleClassName": "jq_host_alias_repo",
@@ -1033,36 +1059,6 @@
             "attributes": {
               "platform": "darwin_amd64",
               "crane_version": "v0.18.0"
-            }
-          },
-          "distroless_base": {
-            "bzlFile": "@@rules_oci~//oci/private:pull.bzl",
-            "ruleClassName": "oci_alias",
-            "attributes": {
-              "target_name": "distroless_base",
-              "scheme": "https",
-              "registry": "gcr.io",
-              "repository": "distroless/base",
-              "identifier": "sha256:e22199b06d14c3dc1f1a62f8600a71b53901db7b6e34f23b01426352e538bd51",
-              "platforms": {
-                "@@platforms//cpu:x86_64": "@distroless_base_linux_amd64",
-                "@@platforms//cpu:arm64": "@distroless_base_linux_arm64_v8"
-              },
-              "bzlmod_repository": "distroless_base",
-              "reproducible": true
-            }
-          },
-          "distroless_base_linux_arm64_v8": {
-            "bzlFile": "@@rules_oci~//oci/private:pull.bzl",
-            "ruleClassName": "oci_pull",
-            "attributes": {
-              "scheme": "https",
-              "registry": "gcr.io",
-              "repository": "distroless/base",
-              "identifier": "sha256:e22199b06d14c3dc1f1a62f8600a71b53901db7b6e34f23b01426352e538bd51",
-              "platform": "linux/arm64/v8",
-              "target_name": "distroless_base_linux_arm64_v8",
-              "bazel_tags": []
             }
           },
           "bsd_tar_darwin_arm64": {
@@ -1118,6 +1114,21 @@
             "ruleClassName": "coreutils_toolchains_repo",
             "attributes": {
               "user_repository_name": "coreutils"
+            }
+          },
+          "distroless_base_amd64": {
+            "bzlFile": "@@rules_oci~//oci/private:pull.bzl",
+            "ruleClassName": "oci_alias",
+            "attributes": {
+              "target_name": "distroless_base_amd64",
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base",
+              "identifier": "sha256:77830878d4995f05fdcdb8ef5a78021d35d90d173e50d6a607f2751cb902781d",
+              "platforms": {},
+              "platform": "@@rules_oci~//oci:distroless_base_amd64_single",
+              "bzlmod_repository": "distroless_base_amd64",
+              "reproducible": true
             }
           },
           "zstd_darwin_amd64": {
@@ -1221,9 +1232,8 @@
         },
         "moduleExtensionMetadata": {
           "explicitRootModuleDirectDeps": [
-            "distroless_base",
-            "distroless_base_linux_amd64",
-            "distroless_base_linux_arm64_v8"
+            "distroless_base_amd64",
+            "distroless_base_arm64"
           ],
           "explicitRootModuleDirectDevDeps": [],
           "useAllRepos": "NO",

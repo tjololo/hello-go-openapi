@@ -3,7 +3,7 @@ load("@aspect_bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
 load("@buildifier_prebuilt//:rules.bzl", "buildifier")
 load("@gazelle//:def.bzl", "gazelle")
 load("@rules_go//go:def.bzl", "go_binary", "go_library")
-load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load", "oci_push")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load", "oci_push", "oci_image_index")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
 # gazelle:prefix github.com/tjololo/hello-go-openapi
@@ -35,36 +35,53 @@ go_library(
 )
 
 go_binary(
-    name = "app",
+    name = "app-amd64",
+    embed = [":hello-go-openapi_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_binary(
+    name = "app-arm64",
     embed = [":hello-go-openapi_lib"],
     visibility = ["//visibility:public"],
 )
 
 pkg_tar(
-    name = "tar",
-    srcs = [":app"],
+    name = "tar-amd64",
+    srcs = [":app-amd64"],
+)
+
+pkg_tar(
+    name = "tar-arm64",
+    srcs = [":app-arm64"],
 )
 
 oci_image(
-    name = "image",
-    base = "@distroless_base",
-    entrypoint = ["/app"],
-    tars = [":tar"],
+    name = "image_amd64",
+    base = "@distroless_base_amd64",
+    entrypoint = ["/app-amd64"],
+    tars = [":tar-amd64"],
 )
 
-# This is the target that should be released to the target platform
-platform_transition_filegroup(
-    name = "transitioned_image",
-    srcs = [":image"],
-    target_platform = select({
-        "@platforms//cpu:arm64": "@rules_go//go/toolchain:linux_arm64",
-        "@platforms//cpu:x86_64": "@rules_go//go/toolchain:linux_amd64",
-    }),
+oci_image(
+    name = "image_arm64",
+    base = "@distroless_base_arm64",
+    entrypoint = ["/app-arm64"],
+    tars = [":tar-arm64"],
+)
+
+oci_image_index(
+    name = "image",
+    images = [
+        ":image_amd64",
+        ":image_arm64",
+    ],
 )
 
 oci_load(
     name = "load",
-    image = ":transitioned_image",
+    image = ":image",
+    format = "oci",
     repo_tags = ["hello-go-api:local"],
 )
 
@@ -77,7 +94,7 @@ expand_template(
 
 oci_push(
     name = "push",
-    image = ":transitioned_image",
+    image = ":image",
     remote_tags = ":stamped",
     repository = "ghcr.io/tjololo/hello-go-openapi",
 )

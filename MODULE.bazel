@@ -20,17 +20,17 @@ use_repo(
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 oci.pull(
-    name = "distroless_base",
-    digest = "sha256:e22199b06d14c3dc1f1a62f8600a71b53901db7b6e34f23b01426352e538bd51",
-    image = "gcr.io/distroless/base",
-    platforms = [
-        "linux/amd64",
-        "linux/arm64/v8",
-    ],
+    name = "distroless_base_amd64",
+    digest = "sha256:77830878d4995f05fdcdb8ef5a78021d35d90d173e50d6a607f2751cb902781d",
+    image = "gcr.io/distroless/base:nonroot-amd64",
+)
+oci.pull(
+    name = "distroless_base_arm64",
+    digest = "sha256:935cc5f6c62e1d175a38a72a1e622b4f03f2aadb22a7f14caa83c90f94433fe9",
+    image = "gcr.io/distroless/base:nonroot-arm64",
 )
 use_repo(
     oci,
-    "distroless_base",
-    "distroless_base_linux_amd64",
-    "distroless_base_linux_arm64_v8",
+    "distroless_base_amd64",
+    "distroless_base_arm64",
 )
