@@ -1,7 +1,7 @@
 load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template")
 load("@buildifier_prebuilt//:rules.bzl", "buildifier")
 load("@gazelle//:def.bzl", "gazelle")
-load("@rules_go//go:def.bzl", "go_binary", "go_library")
+load("@rules_go//go:def.bzl", "go_binary", "go_cross_binary", "go_library")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_image_index", "oci_load", "oci_push")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
@@ -34,15 +34,21 @@ go_library(
 )
 
 go_binary(
-    name = "app-amd64",
+    name = "app",
     embed = [":hello-go-openapi_lib"],
     visibility = ["//visibility:public"],
 )
 
-go_binary(
+go_cross_binary(
+    name = "app-amd64",
+    platform = "@rules_go//go/toolchain:linux_amd64",
+    target = ":app",
+)
+
+go_cross_binary(
     name = "app-arm64",
-    embed = [":hello-go-openapi_lib"],
-    visibility = ["//visibility:public"],
+    platform = "@rules_go//go/toolchain:linux_arm64",
+    target = ":app",
 )
 
 pkg_tar(
