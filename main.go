@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/tjololo/hello-go-openapi/api"
+	_ "github.com/tjololo/hello-go-openapi/docs"
 	"log"
 	"net/http"
 	"os/signal"
@@ -10,15 +11,27 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title Swagger Example API
+// @version 1.0
+// @description This is a sample server openapi server.
+// @termsOfService http://swagger.io/terms/
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @BasePath /
 func main() {
 	// Create context that listens for the interrupt signal from the OS.
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
-	router := gin.Default()
-	router.GET("/", api.GetHello)
+	router := gin.New()
+	router.GET("/hello", api.GetHello)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	srv := &http.Server{
 		Addr:    ":8080",

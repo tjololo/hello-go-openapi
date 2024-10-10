@@ -1,0 +1,30 @@
+basePath: /
+info:
+  contact: {}
+  description: This is a sample server openapi server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /hello:
+    get:
+      consumes:
+      - plain/txt
+      description: get a hello message
+      parameters:
+      - description: Some Name
+        in: query
+        name: name
+        type: string
+      produces:
+      - plain/txt
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Get Hello
+swagger: "2.0"
