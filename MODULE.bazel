@@ -3,6 +3,7 @@ bazel_dep(name = "rules_go", version = "0.50.1")
 bazel_dep(name = "rules_oci", version = "2.0.0")
 bazel_dep(name = "rules_pkg", version = "1.0.1")
 bazel_dep(name = "aspect_bazel_lib", version = "2.9.1")
+
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1", dev_dependency = True)
 
 go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
@@ -18,7 +19,6 @@ use_repo(
 )
 
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
-
 oci.pull(
     name = "distroless_base",
     digest = "sha256:e22199b06d14c3dc1f1a62f8600a71b53901db7b6e34f23b01426352e538bd51",
