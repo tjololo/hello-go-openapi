@@ -10,7 +10,7 @@ import (
 // @Description get a hello message
 // @Accept  text/plain
 // @Produce  text/plain
-// @Param   myname     query    string     false        "Some Name"
+// @Param   name     query    string     false        "Some Name"
 // @Success 200 {string} string	"ok"
 // @Router /hello [get]
 func GetHello(c *gin.Context) {
