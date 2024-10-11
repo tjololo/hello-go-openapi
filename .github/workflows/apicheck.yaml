@@ -33,7 +33,7 @@ jobs:
             const fs = require('fs');
             var diffOutput = fs.readFileSync('oasdiff.txt', {encoding: 'utf8', flag: 'r'});
             // 2. Prep the output
-            const output = `# Breaking API Changes Summary
+            const output = `# API Changes Summary (breaking only)
             #### Check for breaking API changes: 🤖\`${{ steps.breaking_changes.outcome }}\`
             <details><summary>Breaking Changes Output</summary>
             
@@ -50,3 +50,31 @@ jobs:
         if: always()
         shell: bash
         run: cat summary.md >> $GITHUB_STEP_SUMMARY
+      - name: Write to PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            if(context.issue.number) {
+              const fs = require('fs');
+              const output = fs.readFileSync('summary.md', {encoding: 'utf8', flag: 'r'});
+              const botComment = comments.find(comment => {
+                return comment.user.type === 'Bot' && comment.body.includes('# API Changes Summary (breaking only)')
+              })
+              if (botComment) {
+                github.rest.issues.updateComment({
+                  comment_id: botComment.id,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: output
+                });
+              } else {
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: output
+                });
+              }
+            }
