@@ -20,16 +20,16 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/bye": {
+        "/adieu": {
             "get": {
-                "description": "get a bye message",
+                "description": "get a adieu message",
                 "consumes": [
                     "text/plain"
                 ],
                 "produces": [
                     "text/plain"
                 ],
-                "summary": "Get Bye",
+                "summary": "Get adieu",
                 "parameters": [
                     {
                         "type": "string",
@@ -81,7 +81,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
+	Version:          "2.0",
 	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},

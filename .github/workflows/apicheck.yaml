@@ -16,32 +16,40 @@ jobs:
           make gen-swagger
       - name: Check for breaking changes in API
         id: breaking_changes
-        uses: oasdiff/oasdiff-action/breaking@v0.0.19
+        uses: oasdiff/oasdiff-action/breaking@1c611ffb1253a72924624aa4fb662e302b3565d3
         with:
           base: https://raw.githubusercontent.com/tjololo/hello-go-openapi/refs/heads/main/docs/swagger.yaml
           revision: docs/swagger.yaml
-          fail-on-diff: true
+          fail-on: true
+          output-to-file: oasdiff.txt
       - name: Generate Action Summary
         id: action_summary
         uses: actions/github-script@v7
         if: always()
-        env:
-          BREAKING_OUTPUT: ${{ steps.breaking_changes.outputs.breaking }}
         with:
           script: |
-            // 1. Prep the output
+            // 1. Read the output file
+            const fs = require('fs');
+            var diffOutput = "No breaking changes found";
+            fs.readFileSync('oasdiff.txt', 'utf8', function(err, data) {
+              if (err) {
+                diffOutput = "Error reading file";
+              } else {
+                diffOutput = data;
+              }
+            });
+            // 2. Prep the output
             const output = `# Breaking API Changes Summary
             #### Check for breaking API changes: 🤖\`${{ steps.breaking_changes.outcome }}\`
             <details><summary>Breaking Changes Output</summary>
             
             \`\`\`\n
-            ${process.env.BREAKING_OUTPUT}
+            ${diffOutput}
             \`\`\`
             
             </details>`;
             
-            // 2. Set the output variable
-            const fs = require('fs');
+            // 3. Set the output variable
             fs.writeFileSync('summary.md', output);
             core.setOutput('summary', output);
       - name: Write Action Summary
