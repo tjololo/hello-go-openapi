@@ -59,7 +59,7 @@ jobs:
             if(context.issue.number) {
               const fs = require('fs');
               const output = fs.readFileSync('summary.md', {encoding: 'utf8', flag: 'r'});
-              const comments = await github.rest.issues.listComments({
+              const { data: comments } = await github.rest.issues.listComments({
                   issue_number: context.issue.number,
                   owner: context.repo.owner,
                   repo: context.repo.repo
