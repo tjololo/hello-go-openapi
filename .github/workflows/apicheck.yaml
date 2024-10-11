@@ -22,6 +22,7 @@ jobs:
           revision: docs/swagger.yaml
           fail-on: WARN
           output-to-file: oasdiff.txt
+
       - name: Generate Action Summary
         id: action_summary
         uses: actions/github-script@v7
@@ -30,14 +31,7 @@ jobs:
           script: |
             // 1. Read the output file
             const fs = require('fs');
-            var diffOutput = "No breaking changes found";
-            fs.readFileSync('oasdiff.txt', 'utf8', function(err, data) {
-              if (err) {
-                diffOutput = "Error reading file";
-              } else {
-                diffOutput = data;
-              }
-            });
+            var diffOutput = fs.readFileSync('oasdiff.txt', {encoding: 'utf8', flag: 'r'});
             // 2. Prep the output
             const output = `# Breaking API Changes Summary
             #### Check for breaking API changes: 🤖\`${{ steps.breaking_changes.outcome }}\`
