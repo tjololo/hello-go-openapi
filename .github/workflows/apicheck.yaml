@@ -20,7 +20,7 @@ jobs:
         with:
           base: https://raw.githubusercontent.com/tjololo/hello-go-openapi/refs/heads/main/docs/swagger.yaml
           revision: docs/swagger.yaml
-          fail-on: true
+          fail-on: WARN
           output-to-file: oasdiff.txt
       - name: Generate Action Summary
         id: action_summary
