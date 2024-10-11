@@ -35,7 +35,7 @@ jobs:
             const fs = require('fs');
             var diffOutput = fs.readFileSync('oasdiff.txt', {encoding: 'utf8', flag: 'r'});
             // 2. Prep the output
-            const output = `# Breaking API Changes Summary (breaking only)
+            const output = `# Breaking API Changes Detected
             #### Check for breaking API changes: 🤖\`${{ steps.breaking_changes.outcome }}\`
             <details><summary>Breaking Changes Output</summary>
             
@@ -67,7 +67,7 @@ jobs:
                   repo: context.repo.repo
               });
               const botComment = comments.find(comment => {
-                return comment.user.type === 'Bot' && comment.body.includes('# API Changes Summary (breaking only)')
+                return comment.user.type === 'Bot' && comment.body.includes('# Breaking API Changes Detected')
               })
               if (botComment) {
                 github.rest.issues.updateComment({
