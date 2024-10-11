@@ -17,7 +17,7 @@ import (
 )
 
 // @title Swagger Example API
-// @version 1.0
+// @version 2.0
 // @description This is a sample server openapi server.
 // @termsOfService http://swagger.io/terms/
 
@@ -32,7 +32,7 @@ func main() {
 	docs.SwaggerInfo.Host = os.Getenv("CONTAINER_APP_HOSTNAME")
 	router := gin.New()
 	router.GET("/hello", api.GetHello)
-	router.GET("/bye", api.GetBye)
+	router.GET("/adieu", api.GetBye)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	srv := &http.Server{

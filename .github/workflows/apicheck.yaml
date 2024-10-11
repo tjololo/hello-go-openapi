@@ -9,6 +9,8 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - name: Ensure spec is up-to-date
@@ -16,35 +18,76 @@ jobs:
           make gen-swagger
       - name: Check for breaking changes in API
         id: breaking_changes
-        uses: oasdiff/oasdiff-action/breaking@v0.0.19
+        uses: oasdiff/oasdiff-action/breaking@1c611ffb1253a72924624aa4fb662e302b3565d3
         with:
           base: https://raw.githubusercontent.com/tjololo/hello-go-openapi/refs/heads/main/docs/swagger.yaml
           revision: docs/swagger.yaml
-          fail-on-diff: true
+          fail-on: WARN
+          output-to-file: oasdiff.txt
+
       - name: Generate Action Summary
         id: action_summary
         uses: actions/github-script@v7
         if: always()
-        env:
-          BREAKING_OUTPUT: ${{ steps.breaking_changes.outputs.breaking }}
         with:
           script: |
-            // 1. Prep the output
-            const output = `# Breaking API Changes Summary
+            // 1. Read the output file
+            const fs = require('fs');
+            var diffOutput = fs.readFileSync('oasdiff.txt', {encoding: 'utf8', flag: 'r'});
+            // 2. Prep the output
+            const output = `# Breaking API Changes Detected
             #### Check for breaking API changes: 🤖\`${{ steps.breaking_changes.outcome }}\`
             <details><summary>Breaking Changes Output</summary>
             
             \`\`\`\n
-            ${process.env.BREAKING_OUTPUT}
+            ${diffOutput}
             \`\`\`
             
             </details>`;
             
-            // 2. Set the output variable
-            const fs = require('fs');
+            // 3. Set the output variable
             fs.writeFileSync('summary.md', output);
             core.setOutput('summary', output);
       - name: Write Action Summary
-        if: always()
+        if: failure()
         shell: bash
         run: cat summary.md >> $GITHUB_STEP_SUMMARY
+      - name: Write to PR
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            if(context.issue.number) {
+              const fs = require('fs');
+              const output = fs.readFileSync('summary.md', {encoding: 'utf8', flag: 'r'});
+              const { data: comments } = await github.rest.issues.listComments({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo
+              });
+              const botComment = comments.find(comment => {
+                return comment.user.type === 'Bot' && comment.body.includes('# Breaking API Changes Detected')
+              })
+              if (botComment) {
+                github.rest.issues.updateComment({
+                  comment_id: botComment.id,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: output
+                });
+              } else {
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: output
+                });
+              }
+              github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['breaking-changes']
+              });
+            }

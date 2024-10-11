@@ -1,6 +1,8 @@
 
 SWAG ?= $(LOCALBIN)/swag
 SWAG_VERSION ?= v1.16.3
+OASDIFF ?= $(LOCALBIN)/oasdiff
+OASDIFF_VERSION ?= v1.10.26
 
 .PHONY: build
 build: gen-swagger
@@ -16,7 +18,11 @@ gazelle:
 
 .PHONY: gen-swagger
 gen-swagger: swag
-	$(SWAG) init
+	@$(SWAG) init > /dev/null
+
+.PHONE: check-openapi
+check-openapi: gen-swagger oasdiff
+	@$(OASDIFF) breaking --fail-on WARN https://raw.githubusercontent.com/tjololo/hello-go-openapi/refs/heads/main/docs/swagger.yaml docs/swagger.yaml
 
 LOCALBIN ?= $(shell pwd)/bin
 $(LOCALBIN):
@@ -27,6 +33,11 @@ swag: $(SWAG) ## Download controller-gen locally if necessary.
 $(SWAG): $(LOCALBIN)
 	$(call go-install-tool,$(SWAG),github.com/swaggo/swag/cmd/swag,$(SWAG_VERSION))
 
+
+.PHONY: oasdiff
+oasdiff: $(OASDIFF) ## Download controller-gen locally if necessary.
+$(OASDIFF): $(LOCALBIN)
+	$(call go-install-tool,$(OASDIFF),github.com/tufin/oasdiff,$(OASDIFF_VERSION))
 # go-install-tool will 'go install' any package with custom target and name of binary, if it doesn't exist
 # $1 - target path with name of binary
 # $2 - package url which can be installed
