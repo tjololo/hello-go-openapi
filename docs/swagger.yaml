@@ -7,13 +7,13 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
   title: Swagger Example API
-  version: "1.0"
+  version: "2.0"
 paths:
-  /bye:
+  /adieu:
     get:
       consumes:
       - text/plain
-      description: get a bye message
+      description: get a adieu message
       parameters:
       - description: Some Name
         in: query
@@ -26,7 +26,7 @@ paths:
           description: ok
           schema:
             type: string
-      summary: Get Bye
+      summary: Get adieu
   /hello:
     get:
       consumes:

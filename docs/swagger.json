@@ -9,20 +9,20 @@
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
-        "version": "1.0"
+        "version": "2.0"
     },
     "basePath": "/",
     "paths": {
-        "/bye": {
+        "/adieu": {
             "get": {
-                "description": "get a bye message",
+                "description": "get a adieu message",
                 "consumes": [
                     "text/plain"
                 ],
                 "produces": [
                     "text/plain"
                 ],
-                "summary": "Get Bye",
+                "summary": "Get adieu",
                 "parameters": [
                     {
                         "type": "string",
