@@ -15,7 +15,7 @@ jobs:
       - name: Get version from tags
         id: version
         run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
-      - uses: bazel-contrib/setup-bazel@0.14.0
+      - uses: bazel-contrib/setup-bazel@0.15.0
         with:
           bazelisk-cache: true
           # Store build cache per workflow.
