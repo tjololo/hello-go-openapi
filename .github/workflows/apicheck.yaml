@@ -23,7 +23,7 @@ jobs:
           fail-on-diff: true
       - name: Generate Action Summary
         id: action_summary
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         if: always()
         env:
           BREAKING_OUTPUT: ${{ steps.breaking_changes.outputs.breaking }}
