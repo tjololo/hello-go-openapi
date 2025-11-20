@@ -23,7 +23,7 @@ jobs:
           disk-cache: ${{ github.workflow }}-${{ matrix.os }}
           # Share repository cache between workflows.
           repository-cache: true
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Check formatting
         run: |
           bazel run //:buildifier.check
