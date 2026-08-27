@@ -29,7 +29,7 @@ oci.pull(
 )
 oci.pull(
     name = "distroless_base_arm64",
-    digest = "sha256:935cc5f6c62e1d175a38a72a1e622b4f03f2aadb22a7f14caa83c90f94433fe9",
+    digest = "sha256:fc1f1e0b55139479306f23b32f4a33dba857da0ff12550849efad8e8a0c63d73",
     image = "gcr.io/distroless/base:nonroot-arm64",
 )
 use_repo(
